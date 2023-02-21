@@ -2,8 +2,11 @@ body {
     font-family: Arial, sans-serif;
 }
 h1 {
-    color: white
+    color: white;
+    text-align: center;
 }
-Button {
+.footer {
     position: absolute;
+    bottom: 0;
+    right: 0;
 }
