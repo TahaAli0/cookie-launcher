@@ -1,5 +1,7 @@
 import React from "react";
 
+import Button from '@mui/material/Button';
+
 const App = () => {
 
     const handleNotification = function () {
@@ -9,7 +11,7 @@ const App = () => {
     return (
         <>
         <h1>Hi there</h1>
-        <button onClick={handleNotification}>Notify</button>
+        <Button onClick={handleNotification}>Notify</Button>
         </>
     )
 }
