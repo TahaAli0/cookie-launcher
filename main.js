@@ -1,11 +1,41 @@
 
 const { win, BrowserWindow, app, ipcMain, Notification } = require("electron");
 
+const { Client, Authenticator } = require('minecraft-launcher-core');
+
 const path = require("path")
+
+const launcher = new Client();
 
 if (process.platform === 'win32')
 {
     app.setAppUserModelId("Cookie Launcher");
+}
+
+const opts = {
+    authorization: "",
+    root: require("minecraft-folder-path"),
+    version: {
+        number: "1.19.2",
+        type: "release"
+    },
+    memory: {
+        max: "3G",
+        min: "2G"
+    },
+    javaPath: "C:/Program Files/Java/jdk-17/bin/java.exe"
+}
+
+function launchMinecraft(username) {
+    console.log(`${username} at launchMinecraft`)
+    opts.authorization = Authenticator.getAuth(username)
+    
+    launcher.launch(opts);
+
+    console.log(`${username} at launchMinecraft`)
+
+    launcher.on('debug', (e) => console.log(e));
+    launcher.on('data', (e) => console.log(e));
 }
 
 function createWindow() {
@@ -29,6 +59,11 @@ function createWindow() {
 
 ipcMain.on("notify", (_, message) => {
     new Notification({title: "Notification", body: message}).show();
+})
+
+ipcMain.on("launch", (_, username)  => {
+    console.log(`${username} at ipcMain.on`)
+    launchMinecraft(username)
 })
 
 app.whenReady().then(createWindow)
