@@ -1,9 +1,10 @@
 
-const { win, BrowserWindow, app, ipcMain, Notification } = require("electron");
+const { BrowserWindow, app, ipcMain, Notification } = require("electron");
 
 const { Client, Authenticator } = require('minecraft-launcher-core');
 
-const path = require("path")
+const path = require("path");
+const { electron } = require("process");
 
 const launcher = new Client();
 
@@ -34,8 +35,8 @@ function launchMinecraft(username) {
 
     console.log(`${username} at launchMinecraft`)
 
-    launcher.on('debug', (e) => console.log(e));
-    launcher.on('data', (e) => console.log(e));
+    launcher.on('debug', (e) => electron.consoleApi.receiveLog(e));
+    launcher.on('data', (e) => electron.consoleApi.receiveLog(e));
 }
 
 function createWindow() {

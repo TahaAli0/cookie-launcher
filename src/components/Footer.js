@@ -4,11 +4,11 @@ import Button from '@mui/material/Button';
 
 import { TextField } from "@mui/material";
 
+import { ipcRenderer as ipc } from "electron"
+
 function hasWhiteSpace(s) {
     return /\s/g.test(s);
 }
-
-
 const Footer = () => {
 
     const username = useRef(null)
