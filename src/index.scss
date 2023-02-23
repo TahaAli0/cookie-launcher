@@ -5,8 +5,13 @@ h1 {
     color: white;
     text-align: center;
 }
-.footer {
+.footer.a {
     position: absolute;
     bottom: 0;
     right: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+.footer.b {
+    text-align: left;
 }

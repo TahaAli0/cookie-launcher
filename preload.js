@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld("electron", {
     },
     consoleApi : {
         recieveLog(message) {
-            ipcRenderer.send("log", message)
+            ipcRenderer.on("log", message)
         }
     }
 })

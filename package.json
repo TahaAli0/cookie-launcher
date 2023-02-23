@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "build": "webpack --config webpack.common.js"
+    "build": "webpack --config webpack.common.js",
+    "release": "electron-packager . cookie-launcher --platform=win32 --arch=x64 --out dist/"
   },
   "author": "TahaAli0",
   "license": "MIT",
@@ -28,6 +29,7 @@
     "@babel/preset-react": "^7.18.6",
     "babel-loader": "^9.1.2",
     "css-loader": "^6.7.3",
+    "electron-packager": "^17.1.1",
     "electron-reload": "^2.0.0-alpha.1",
     "sass": "^1.58.3",
     "sass-loader": "^13.2.0",
