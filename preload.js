@@ -11,5 +11,10 @@ contextBridge.exposeInMainWorld("electron", {
         recieveLog(message) {
             ipcRenderer.on("log", message)
         }
+    },
+    versionsApi : {
+        receiveVersions(list) {
+            ipcRenderer.on("versions", list)
+        }
     }
 })

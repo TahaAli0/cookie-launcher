@@ -12,7 +12,13 @@ const { Client, Authenticator } = require("minecraft-launcher-core");
 const path = require("path");
 const { electron } = require("process");
 
+const fs = require('fs');
+
+const mc_path = require("minecraft-folder-path")
+
 const launcher = new Client();
+
+const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
 
 let win;
 let tray;
@@ -21,9 +27,28 @@ if (process.platform === "win32") {
   app.setAppUserModelId("Cookie Launcher");
 }
 
+function getVersions() {
+  const versions_list = []
+  fs.readdir(path.resolve(mc_path + "/versions/"), { withFileTypes: true }, (error, files) => {
+  const directoriesInDIrectory = files
+      .filter((item) => item.isDirectory())
+      .map((item) => item.name)
+  
+    for (let i in directoriesInDIrectory) {
+      versions_list.push({
+        label: directoriesInDIrectory[i],
+        value: directoriesInDIrectory[i]
+      })
+    }
+  })
+  return versions_list
+};
+
+const Versions = getVersions()
+
 const opts = {
   authorization: "",
-  root: require("minecraft-folder-path"),
+  root: mc_path,
   version: {
     number: "1.19.2",
     type: "release",
@@ -72,10 +97,6 @@ function createWindow() {
   win.loadFile("./public/index.html");
 }
 
-ipcMain.on("notify", (_, message) => {
-  new Notification({ title: "Notification", body: message }).show();
-});
-
 ipcMain.on("launch", (_, username) => {
   console.log(`${username} at ipcMain.on`);
   launchMinecraft(username);
@@ -88,18 +109,20 @@ app.whenReady().then(() => {
   tray.setContextMenu(
     Menu.buildFromTemplate([
       {
-        label: "Minimize App",
+        label: "Show App",
         click: function () {
-          win.hide();
+          win.show();
         },
       },
       {
         label: "Quit",
         click: function () {
-          isQuiting = true;
           app.quit();
         },
       },
     ])
-  );
-});
+    );
+    sleep(7000).then(() => {
+      win.webContents.send("versions", Versions)
+    })
+  });
