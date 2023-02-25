@@ -19,6 +19,7 @@
     "@xmcl/user": "^2.1.8",
     "async": "^3.2.4",
     "electron": "^23.1.0",
+    "js-yaml": "^4.1.0",
     "minecraft-folder-path": "^1.2.0",
     "minecraft-launcher-core": "^3.16.18",
     "react": "^18.2.0",
@@ -30,6 +31,11 @@
     "@babel/core": "^7.21.0",
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.21.0",
+    "@babel/register": "^7.21.0",
+    "@types/node": "^18.14.1",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
     "babel-loader": "^9.1.2",
     "css-loader": "^6.7.3",
     "electron-packager": "^17.1.1",
@@ -38,6 +44,7 @@
     "sass": "^1.58.3",
     "sass-loader": "^13.2.0",
     "style-loader": "^3.3.1",
+    "typescript": "^4.9.5",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"
   }

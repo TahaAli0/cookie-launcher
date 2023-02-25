@@ -31,6 +31,9 @@ const Footer = () => {
     }
 
     electron.versionsApi.receiveVersions((versions, list) => {
+        if (list.length === 0) {list = [{
+            "label" : "latest", "value" : "1.19.3"
+        }]}
         setIsLoading(false)
         setVersionsList(list)
         setIsDisabled(false)

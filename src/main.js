@@ -7,15 +7,16 @@ const {
   Notification,
 } = require("electron");
 
-const { launch } = require('@xmcl/core');
-const { login, Authentication, offline } = require('@xmcl/user');
+const { Client, Authenticator } = require('minecraft-launcher-core');
+const launcher = new Client();
 
 const path = require("path");
 const { electron } = require("process");
 
 const fs = require('fs');
+const yaml = require("js-yaml");
 
-const gamePath = require("minecraft-folder-path")
+const gamePath = require("minecraft-folder-path");
 
 const javaPath = "C:/Program Files/Java/jdk-17/bin/java.exe"
 
@@ -25,6 +26,7 @@ let win;
 let tray;
 let tray_object;
 let tray_object_2;
+let opts;
 
 if (process.platform === "win32") {
   app.setAppUserModelId("Cookie Launcher");
@@ -32,53 +34,52 @@ if (process.platform === "win32") {
 
 function getVersions() {
   const versions_list = []
-  fs.readdir(path.resolve(gamePath + "/versions/"), { withFileTypes: true }, (error, files) => {
-  const directoriesInDIrectory = files
-      .filter((item) => item.isDirectory())
-      .map((item) => item.name)
-  
-    for (let i in directoriesInDIrectory) {
-      versions_list.push({
-        label: directoriesInDIrectory[i],
-        value: directoriesInDIrectory[i]
-      })
-    }
-  })
+
+  let yamlFile = fs.readFileSync(__dirname + "/public/java.yaml", "utf8");
+
+  let loadedYaml = yaml.load(yamlFile);
+
+  for (let i in loadedYaml) {
+    versions_list.push({
+      label: loadedYaml[i][0], value: loadedYaml[i][0]
+    })
+  }
+
   return versions_list
 };
 
-const Versions = getVersions()
+const Versions = getVersions();
 
 async function launchMinecraft(username, version) {
   console.log(`${username} at launchMinecraft`);
 
-  let authentication = offline(username);
-
-  let accessToken = authentication.accessToken
-
-  console.log(authentication)
-  
+  let opts = {
+    // For production launchers, I recommend not passing 
+    // the getAuth function through the authorization field and instead
+    // handling authentication outside before you initialize
+    // MCLC so you can handle auth based errors and validation!
+    authorization: Authenticator.getAuth(username),
+    root: gamePath,
+    version: {
+        number: version,
+        type: "release"
+    },
+    memory: {
+        max: "2G",
+        min: "1G"
+    },
+    javaPath: javaPath
+  };
 
   console.log(`${username} at launchMinecraft`);
-  win.hide()
-  tray.setContextMenu(tray_object_2)
+  win.hide();
+  tray.setContextMenu(tray_object_2);
 
-  console.log(gamePath)
-  console.log(javaPath)
-  console.log(version)
+  console.log(gamePath);
+  console.log(javaPath);
+  console.log(version);
 
-  const process = await launch();
-
-  // process.stdout.on('data', (b) => {
-    // print mc output
-  //  console.log(b.toString());
-// });
-  // process.stdout.on('exit', (b) => {
-  //  win.show();
-  //  win.webContents.send("log", "closed");
-  //
-  //  tray.setContextMenu(tray_object);
-  //});
+  launcher.launch(opts);
 }
 
 function createWindow() {
@@ -99,6 +100,21 @@ function createWindow() {
 
   win.setIcon(path.join(__dirname, "/public/logo.png"));
   win.loadFile("./public/index.html");
+
+  launcher.on('debug', (e) => {
+    win.webContents.send("log", e);
+    console.log(e)
+  });
+  launcher.on('data', (e) => {
+    win.webContents.send("log", e);
+    console.log(e)
+  });
+
+  launcher.on("close", (e) => {
+    win.show();
+    win.webContents.send("log", "closed");
+    tray.setContextMenu(tray_object);
+  })
 }
 
 ipcMain.on("launch", async (_, username, version) => {
