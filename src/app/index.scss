@@ -1,0 +1,25 @@
+body {
+    font-family: Arial, sans-serif;
+}
+h1 {
+    color: white;
+    text-align: center;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.console {
+    color: white;
+    text-align: left;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

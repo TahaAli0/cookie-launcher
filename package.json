@@ -2,12 +2,12 @@
   "name": "cookie-launcher",
   "version": "1.0.0",
   "description": "Minecraft launcher",
-  "main": "main.js",
+  "main": "./src/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
+    "start": "electron ./src/main.js",
     "build": "webpack --config webpack.common.js",
-    "release": "electron-packager . cookie-launcher --platform=win32 --arch=x64 --out dist/"
+    "release": "electron-packager . cookie-launcher --platform=win32 --arch=x64 --out release/"
   },
   "author": "TahaAli0",
   "license": "MIT",
@@ -15,6 +15,9 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/material": "^5.11.10",
+    "@xmcl/core": "^2.10.1",
+    "@xmcl/user": "^2.1.8",
+    "async": "^3.2.4",
     "electron": "^23.1.0",
     "minecraft-folder-path": "^1.2.0",
     "minecraft-launcher-core": "^3.16.18",
@@ -31,6 +34,7 @@
     "css-loader": "^6.7.3",
     "electron-packager": "^17.1.1",
     "electron-reload": "^2.0.0-alpha.1",
+    "electronmon": "^2.0.2",
     "sass": "^1.58.3",
     "sass-loader": "^13.2.0",
     "style-loader": "^3.3.1",
